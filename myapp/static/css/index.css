@@ -1,6 +1,21 @@
+
 .navbar-dark .navbar-nav .nav-link {
     color: white;
     font-size: 16px;
+}
+
+.al{
+    align-items: baseline;
+   
+    gap: 20px;
+}
+.messages {
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
 }
 
 .navbar-dark .navbar-nav .nav-link:hover {
@@ -214,6 +229,7 @@ nav {
     font-size: 16px;
     
 }
+
 
 /* Стили для бургера */
 /* .burger {
@@ -762,6 +778,8 @@ footer {
 }
 .footer-contact{
     color: white;
+    align-items: center;
+    justify-content: center;
 }
 
 .footer-left p {
@@ -795,6 +813,12 @@ footer {
 .footer-contact a:hover {
     color: #a08d6a;
 }
+.footer-info {
+   
+    align-items: center;
+    justify-content: space-between;
+    
+}
 
 .socials a {
     margin-right: 10px;
@@ -811,6 +835,8 @@ footer {
     .footer-info {
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        width: 100%;
     }
     
     .footer-links,

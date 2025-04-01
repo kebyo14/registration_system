@@ -15,43 +15,43 @@
 
 <body>
     <header>
-        <nav data-aos="flip-left" class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(35, 42, 50);">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(35, 42, 50);">
             <div class="container">
-                
                 <a class="navbar-brand" href="#">
-                    
-                    <img src="{% static 'images/1.png' %}" alt="Logo" style="height: 40px;"> 
+                    <img src="{% static 'images/1.png' %}" alt="Logo" style="height: 40px;">
                 </a>
                 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                
+                <div class="collapse navbar-collapse justify-content-center text-center" id="navbarNav">
+                    <ul class="navbar-nav me-auto ms-auto">
                         {% for nav in navs %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{ nav.texts  }}</a>
+                            <a class="nav-link" href="#">{{ nav.texts }}</a>
                         </li>
                         {% endfor %}
-                      
                     </ul>
                     
-                    <div class="sign__section">
+                    <div class="d-flex align-items-center justify-content-center gap-2 mt-3 mt-lg-0">
                         {% if request.session.user_name %}
-                            <p>{{ request.session.user_name }}</p>
-                            <a href="{% url 'logout' %}">Выйти</a> 
+                            <span class="text-white me-2">{{ request.session.user_name }}</span>
+                            
+                            {% if request.session.user_image %}
+                                <img src="{{ request.session.user_image }}" alt="Profile Image" class="rounded-circle" width="40" height="40">
+                            {% endif %}
+                            
+                            <a href="{% url 'logout' %}" class="btn btn-outline-light">Выйти</a>
                         {% else %}
-                            <a href="{% url 'create_item' %}">Sign up</a>
-                            <a href="{% url 'link_item' %}">Sign in</a>
-                            <p>Гость!</p>
+                            <a href="{% url 'create_item' %}" class="btn btn-outline-light">Sign up</a>
+                            <a href="{% url 'link_item' %}" class="btn btn-light">Sign in</a>
                         {% endif %}
                     </div>
                     
-                    
-                    
-                </div>
             </div>
         </nav>
+
     </header>
    
     
@@ -151,10 +151,54 @@
             <h2>Есть вопросы?</h2>
             <p>*Мы никому не передаем ваши данные. И не сохраняем ваш номер в базу.</p>
             <div class="form">
-                <input type="text" placeholder="Ваше имя">
-                <input type="text" placeholder="Ваш телефон">
-                <button>Посмотреть район</button>
+                <input type="text" id="name" placeholder="Ваше имя">
+                <input type="text" id="phone" placeholder="Ваш телефон">
+                <button id="submitBtn">Отправить</button>
             </div>
+        
+            <div id="message"></div>
+        
+            <script>
+                document.getElementById("submitBtn").addEventListener("click", function () {
+                    let name = document.getElementById("name").value;
+                    let phone = document.getElementById("phone").value;
+                
+                    fetch("/save_form/", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": getCookie("csrftoken"),
+                        },
+                        body: JSON.stringify({ name: name, phone: phone }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Данные успешно отправлены!");
+                        } else {
+                            alert("Ошибка: " + data.error);
+                        }
+                    })
+                    .catch(error => console.error("Ошибка:", error));
+                });
+                
+                // Функция для получения CSRF-токена
+                function getCookie(name) {
+                    let cookieValue = null;
+                    if (document.cookie && document.cookie !== "") {
+                        let cookies = document.cookie.split(";");
+                        for (let i = 0; i < cookies.length; i++) {
+                            let cookie = cookies[i].trim();
+                            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+                </script>
+                
         </div>
         <div data-aos="fade-down-right" data-aos-duration="1000" class="footer-info">
             <div class="footer-left">
